@@ -23,7 +23,7 @@ function each(coll, f) {
 
 function filter(array, predicate) {
   var acc = [];
-  each(array, function(element, i) {
+  each(array, function (element, i) {
     if (predicate(element, i)) {
       acc.push(element);
     }
@@ -33,7 +33,7 @@ function filter(array, predicate) {
 
 function map(array, func) {
   var acc = [];
-  each(array, function(element, i) {
+  each(array, function (element, i) {
     acc.push(func(element, i));
   });
   return acc;
@@ -44,7 +44,7 @@ function reduce(array, f, acc) {
     acc = array[0];
     array = array.slice(1);
   }
-  each(array, function(element, i) {
+  each(array, function (element, i) {
     acc = f(acc, element, i);
   });
   return acc;
@@ -59,7 +59,10 @@ function reduce(array, f, acc) {
 //wordLengths("hello its me") // [5,3,2]
 
 function wordLengths(str) {
-    // TODO: your code here 
+  var words = str.split(' ');                  ///// split to change the string input into an array to applicate the high order function map
+  return map(words, function (element, acc) {
+    return element.length;
+  }, 0);
 }
 
 //=============================================================================
@@ -72,7 +75,15 @@ function wordLengths(str) {
 // countOccurrences("hello, world!", "l"); // 3
 
 function countOccurrences(string, character) {
-    // your code is here
+  var array = string.split('')                    ///// split to change the string input into an array to applicate the high order function each 
+  var char = 0;
+  each(array, function (element, i) {
+    if (element === character) {
+      char++;
+    }
+
+  });
+  return char;
 }
 
 //=============================================================================
@@ -84,7 +95,10 @@ function countOccurrences(string, character) {
 // wordsLongerThanThree("Hello Mad World") //["Hello", "World"]
 
 function wordsLongerThanThree(str) {
-    // TODO: your code here 
+  var words = str.split(' ')
+  return filter(words, function (element) {
+    return element.length > 3;
+  });
 }
 
 //=============================================================================
@@ -98,23 +112,26 @@ function wordsLongerThanThree(str) {
 //repeatString('dog', 2); // => 'dog' + 'dog' => 'dogdog' 
 //repeatString('dog', 3); // => 'dog' + 'dog' + 'dog' => 'dogdogdog'
 
-function repeatString(str, count) { 
- // TODO: your code here 
-} 
- 
+function repeatString(str, count) {
+  if (count === 0) {
+    return "";
+  }
+  else return str + repeatString(str, count - 1);
+}
+
 
 //=============================================================================
 /*                                  Q5                                       */
 //=============================================================================
 /*
  using closures create a function called makePizza that has the following properties and methods
- crust a property represented by a string. ex "thin","thick". 
+ crust a property represented by a string. ex "thin","thick".
  size a property represented by a string. ex "M","L".
  numberOfSlice a property that hold the number of slice, ex: 8
- ** the values of all properties will be provided as arguments in the function invocation. 
+ ** the values of all properties will be provided as arguments in the function invocation.
  addIngredients a function that add a new ingredient to the ingredients property.
  displayIngredients a function that displays a comma separated string of all ingredients. ex: The ingredients are:tomato,mushroom,meat
- bakePizza a function that display a string with your pizza description after 2 seconds. ex "Your thin M 8 slice pizza is done" 
+ bakePizza a function that display a string with your pizza description after 2 seconds. ex "Your thin M 8 slice pizza is done"
  eatSlice a function that let you eat from the pizza as long as the numberOfSlice is greater than zero and decrease the total number of slices by one.
  */
 //Example:
@@ -128,7 +145,31 @@ function repeatString(str, count) {
 // pizza.eatSlice();
 // pizza.eatSlice();
 
-// Write your code here .....
+function makePizza(crust, size, numberOfSlices) {
+  var ingredients = [];
+  var c = crust;
+  var s = size;
+  var n = numberOfSlices;
+  return {
+    addIngredients: function (ingredient) {
+      ingredients.push(ingredient);
+    },
+    displayIngredients: function () {
+      console.log(ingredients)
+    },
+    bakePizza: function () {
+      setTimeout(function () {
+        console.log("Your" + " " + c + " " + s + " " + n + " " + "slice pizza is done")
+      }, 2000);
+    },
+    eatSlice: function () {
+      if (n > 0) {
+        n = n - 1;
+      }
+      else return " your pizza is over "
+    }
+  }
+}
 
 //=============================================================================
 /*                                  Q6                                      */
@@ -153,8 +194,30 @@ d- Decrement the number of "unread" books
 */
 
 // Now, to make sure that you are actually reading, make a comment below this and type: Yes I am
+// yes I am 
 
-// Write your code here .....
+function ReadingList(read, unread) {
+
+  var book = {};
+  book.newBook = addBook;
+  book.read = read;
+  book.unRead = unread;
+  book.readBooks = [];
+  book.arrayCurrent = [];
+  book.toRead = [];
+  book.currentRead = currentRead;
+  return book;
+}
+var addBook = function (name) {
+  this.toRead.push(name);
+  this.unRead++;
+}
+var finishCurrentBook = function () {
+  this.readBooks.push(this.currentRead);
+  this.read++;
+  this.toRead.shift(this.currentRead);
+  this.unRead--;
+}
 
 //=============================================================================
 /*                                  Q7                                       */
